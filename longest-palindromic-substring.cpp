@@ -1,41 +1,21 @@
-
 class Solution {
-public:
+public: //odd-even center expansion
     string longestPalindrome(string s) {
-        string result  = s;
         int n = (int) s.length();
-        if (n <= 0) return "";
-        int start = -1, end = n, dmax = -1;
+        if (n == 0) return "";
+        int start = -1, d = 0, lenMax = -1;
         for (int i = 0; i < n; i++) {
-            int d;
-            for (d = 0; i + d + 1 < n && i - d >= 0; d++){
-                if (s[i-d] != s[i+d+1]){
-                    break;
-                }
+            for (d = 0; i-d >= 0 && i+1+d<=n-1 && s[i-d]==s[i+1+d]; d++);
+            if (2*d > lenMax){
+                lenMax = 2*d;
+                start = i-d+1;
             }
-            d--;
-            if (d > dmax){
-                dmax = d;
-                start = i - d;
-                end = i + d + 1;
+            for (d = 0; i-d >= 0 && i+d<=n-1 && s[i-d]==s[i+d]; d++);
+            if (2*d-1 > lenMax){
+                lenMax = 2*d-1;
+                start = i-d+1;
             }
         }
-        
-        for (int i = 0; i < n; i++) {
-            int d;
-            for (d = 0; i + d < n && i - d >= 0; d++){
-                if (s[i-d] != s[i+d]){
-                    break;
-                }
-            }
-            d--;
-            if (d > dmax){
-                dmax = d;
-                start = i - d;
-                end = i + d;
-            }
-        }
-        result = s.substr(start, end - start + 1);
-        return result;
+        return s.substr(start, lenMax);
     }
 };
